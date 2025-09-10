@@ -1,7 +1,6 @@
 use crossbeam_skiplist::SkipMap;
 use bytes::Bytes;
 use std::*;
-use std::str::Bytes;
 use std::sync::atomic::AtomicUsize;
 
 pub struct MemTable {
@@ -13,13 +12,19 @@ pub struct MemTable {
 impl MemTable {
     pub fn new() -> Self {
         MemTable {
-            data : SkipMap::new(),
-            size : AtomicUsize::new(0),
-            entry_count : AtomicUsize::new(0),
+            data: SkipMap::new(),
+            size: AtomicUsize::new(0),
+            entry_count: AtomicUsize::new(0),
+        }
+    }
+
+    pub fn get(&self, key: &Bytes) -> Option<Bytes> {
+        if let Some(entry) = self.data.get(key) {
+            Some(entry.value().clone())
+        } else {
+            None
         }
     }
 }
 
-    
 
-}
